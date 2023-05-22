@@ -13,6 +13,20 @@ export class CatsService {
     return createdCat;
   }
 
+  async edit(id: string, createCatDto: CreateCatDto): Promise<Cat> {
+    return this.catModel
+      .findOneAndUpdate(
+        {
+          _id: id,
+        },
+        createCatDto,
+        {
+          new: true,
+        },
+      )
+      .exec();
+  }
+
   async findAll(): Promise<Cat[]> {
     return this.catModel.find().exec();
   }
