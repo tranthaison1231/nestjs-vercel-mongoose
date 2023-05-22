@@ -11,6 +11,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('DATABASE_URI'),
         dbName: configService.get<string>('DATABASE_NAME'),
+        useUnifiedTopology: true,
       }),
       inject: [ConfigService],
     }),

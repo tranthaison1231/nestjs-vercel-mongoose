@@ -6,10 +6,12 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './schemas/cat.schema';
+import { GetCatsFilterDto } from './dto/get-cats-filter.dto';
 
 @Controller('cats')
 export class CatsController {
@@ -21,8 +23,8 @@ export class CatsController {
   }
 
   @Get()
-  async findAll(): Promise<Cat[]> {
-    return this.catsService.findAll();
+  async findAll(@Query() filterDto: GetCatsFilterDto): Promise<Cat[]> {
+    return this.catsService.findAll(filterDto);
   }
 
   @Get(':id')
