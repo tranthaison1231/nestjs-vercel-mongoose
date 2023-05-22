@@ -12,12 +12,16 @@ import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './schemas/cat.schema';
 import { GetCatsFilterDto } from './dto/get-cats-filter.dto';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('cats')
 @Controller('cats')
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create cat' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
   async create(@Body() createCatDto: CreateCatDto) {
     await this.catsService.create(createCatDto);
   }
@@ -28,6 +32,11 @@ export class CatsController {
   }
 
   @Get(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'The found record',
+    type: Cat,
+  })
   async findOne(@Param('id') id: string): Promise<Cat> {
     return this.catsService.findOne(id);
   }
