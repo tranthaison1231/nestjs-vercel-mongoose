@@ -13,6 +13,7 @@ import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './schemas/cat.schema';
 import { GetCatsFilterDto } from './dto/get-cats-filter.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { IDValidator } from 'src/shared/validators.ts/id.validator';
 
 @ApiTags('cats')
 @Controller('cats')
@@ -37,20 +38,20 @@ export class CatsController {
     description: 'The found record',
     type: Cat,
   })
-  async findOne(@Param('id') id: string): Promise<Cat> {
+  async findOne(@Param('id') id: IDValidator): Promise<Cat> {
     return this.catsService.findOne(id);
   }
 
   @Put(':id')
   async edit(
-    @Param('id') id: string,
+    @Param('id') id: IDValidator,
     @Body() createCatDto: CreateCatDto,
   ): Promise<Cat> {
     return this.catsService.edit(id, createCatDto);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
+  async delete(@Param('id') id: IDValidator) {
     return this.catsService.delete(id);
   }
 }
