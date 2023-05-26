@@ -13,7 +13,7 @@ import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './schemas/cat.schema';
 import { GetCatsFilterDto } from './dto/get-cats-filter.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { IDValidator } from 'src/shared/validators.ts/id.validator';
+import { IDValidator } from '../../shared/validators.ts/id.validator';
 
 @ApiTags('cats')
 @Controller('cats')
