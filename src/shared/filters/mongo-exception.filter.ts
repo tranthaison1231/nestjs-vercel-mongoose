@@ -12,6 +12,7 @@ export class MongoExceptionFilter implements ExceptionFilter {
   catch(exception: MongooseError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
+    const request = ctx.getRequest<Request>();
 
     let error;
     switch (exception.name) {
@@ -23,7 +24,13 @@ export class MongoExceptionFilter implements ExceptionFilter {
         break;
       }
       // case 'MongooseError': { break; } // general Mongoose error
-      // case 'CastError': { break; }
+      case 'CastError': {
+        error = {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Cast Error',
+        };
+        break;
+      }
       // case 'DisconnectedError': { break; }
       // case 'DivergentArrayError': { break; }
       // case 'MissingSchemaError': { break; }

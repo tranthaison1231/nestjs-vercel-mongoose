@@ -2,10 +2,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { HydratedDocument } from 'mongoose';
 
-export type CatDocument = HydratedDocument<Cat>;
+export type UserDocument = HydratedDocument<User>;
 
 @Schema()
-export class Cat {
+export class User {
   @Prop()
   @ApiProperty({ example: 'Tom' })
   name: string;
@@ -13,13 +13,6 @@ export class Cat {
   @Prop()
   @ApiProperty({ example: 1, description: 'The age of the Cat' })
   age: number;
-
-  @Prop()
-  @ApiProperty({
-    example: 'Maine Coon',
-    description: 'The breed of the Cat',
-  })
-  breed: string;
 }
 
-export const CatSchema = SchemaFactory.createForClass(Cat);
+export const UserSchema = SchemaFactory.createForClass(User);

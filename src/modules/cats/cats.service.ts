@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './schemas/cat.schema';
 import { GetCatsFilterDto } from './dto/get-cats-filter.dto';
-import { IDValidator } from 'src/shared/validators.ts/id.validator';
+import { IDValidator } from '../../shared/validators.ts/id.validator';
 
 @Injectable()
 export class CatsService {
@@ -15,7 +15,7 @@ export class CatsService {
     return createdCat;
   }
 
-  async edit(id: IDValidator, createCatDto: CreateCatDto): Promise<Cat> {
+  async edit(id: string, createCatDto: CreateCatDto): Promise<Cat> {
     return this.catModel
       .findByIdAndUpdate(id, createCatDto, {
         new: true,
@@ -37,7 +37,7 @@ export class CatsService {
       .exec();
   }
 
-  async findOne(id: IDValidator): Promise<Cat> {
+  async findOne(id: string): Promise<Cat> {
     return this.catModel.findById(id).exec();
   }
 

@@ -7,16 +7,28 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './schemas/cat.schema';
 import { GetCatsFilterDto } from './dto/get-cats-filter.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { IDValidator } from '../../shared/validators.ts/id.validator';
+import { RolesGuard } from '../../shared/guards/roles.guard';
+import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
 
 @ApiTags('cats')
 @Controller('cats')
+@UseGuards(RolesGuard)
+@UseInterceptors(LoggingInterceptor)
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
@@ -28,23 +40,26 @@ export class CatsController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get list of cat' })
+  @ApiQuery({ name: 'name', example: 'Tom' })
+  @ApiQuery({ name: 'age', example: '20' })
+  @ApiQuery({ name: 'breed', example: 'Jerry' })
   async findAll(@Query() filterDto: GetCatsFilterDto): Promise<Cat[]> {
     return this.catsService.findAll(filterDto);
   }
 
   @Get(':id')
-  @ApiResponse({
-    status: 200,
-    description: 'The found record',
-    type: Cat,
+  @ApiParam({ name: 'id', example: 'SPOT-0000' })
+  @ApiOperation({
+    summary: 'Get cat by ID',
   })
-  async findOne(@Param('id') id: IDValidator): Promise<Cat> {
+  async findOne(@Param('id') id: string): Promise<Cat> {
     return this.catsService.findOne(id);
   }
 
   @Put(':id')
   async edit(
-    @Param('id') id: IDValidator,
+    @Param('id') id: string,
     @Body() createCatDto: CreateCatDto,
   ): Promise<Cat> {
     return this.catsService.edit(id, createCatDto);
