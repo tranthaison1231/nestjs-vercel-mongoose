@@ -4,8 +4,7 @@ import {
   ExceptionFilter,
   HttpStatus,
 } from '@nestjs/common';
-
-import * as MongooseError from 'mongoose/lib/error'; // I couldn't see the error class is being exported from Mongoose
+import { MongooseError } from 'mongoose';
 
 @Catch(MongooseError)
 export class MongoExceptionFilter implements ExceptionFilter {
