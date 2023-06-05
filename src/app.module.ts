@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CatsModule } from './modules/cats/cats.module';
 import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UsersModule } from './modules/users/users.module';
     }),
     CatsModule,
     UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

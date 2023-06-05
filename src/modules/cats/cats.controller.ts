@@ -10,10 +10,6 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { CatsService } from './cats.service';
-import { CreateCatDto } from './dto/create-cat.dto';
-import { Cat } from './schemas/cat.schema';
-import { GetCatsFilterDto } from './dto/get-cats-filter.dto';
 import {
   ApiOperation,
   ApiParam,
@@ -21,13 +17,17 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { IDValidator } from '../../shared/validators.ts/id.validator';
-import { RolesGuard } from '../../shared/guards/roles.guard';
+import { JwtAuthGuard } from '../../shared/guards/jwt.guard';
 import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
+import { IDValidator } from '../../shared/validators.ts/id.validator';
+import { CatsService } from './cats.service';
+import { CreateCatDto } from './dto/create-cat.dto';
+import { GetCatsFilterDto } from './dto/get-cats-filter.dto';
+import { Cat } from './schemas/cat.schema';
 
 @ApiTags('cats')
 @Controller('cats')
-@UseGuards(RolesGuard)
+@UseGuards(JwtAuthGuard)
 @UseInterceptors(LoggingInterceptor)
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
