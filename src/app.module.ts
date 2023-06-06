@@ -6,10 +6,19 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { HandlebarsAdapter, MailerModule } from '@nest-modules/mailer';
 import { join } from 'path';
+import * as Joi from 'joi';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      validationSchema: Joi.object({
+        DATABASE_URI: Joi.string().required(),
+        DATABASE_NAME: Joi.string().required(),
+        MAIL_TRANSPORT: Joi.string().required(),
+        MAIL_FROM: Joi.string().required(),
+        WEB_URL: Joi.string().required(),
+      }),
+    }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({

@@ -4,6 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { EXPIRES_IN } from '../../shared/constants /config';
 import { User, UserDocument } from '../users/schemas/user.shema';
@@ -11,13 +12,13 @@ import { UsersService } from '../users/users.service';
 import { CreateToken } from './auth.interface';
 import { SignInDto, SignUpDto } from './dto/auth-credentials.dto';
 import { TokenPayloadDto } from './dto/token-payload.dto';
-import { WEB_URL } from '../../shared/environments';
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
     private usersService: UsersService,
+    private readonly configService: ConfigService,
     private mailerService: MailerService,
   ) {}
 
@@ -29,7 +30,9 @@ export class AuthService {
       template: './verify-user',
       context: {
         name: user.name,
-        link: `${WEB_URL}/confirm-verified?token=${token.accessToken}`,
+        link: `${this.configService.get('WEB_URL')}/confirm-verified?token=${
+          token.accessToken
+        }`,
       },
     });
   }
