@@ -19,7 +19,7 @@ export class SignInDto {
   password: string;
 }
 
-export class AuthCredentialsDto extends SignInDto {
+export class SignUpDto extends SignInDto {
   @ApiProperty()
   @IsString()
   @MinLength(4)

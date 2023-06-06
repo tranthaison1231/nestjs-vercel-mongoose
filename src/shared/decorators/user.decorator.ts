@@ -1,11 +1,9 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { User } from '../../modules/users/schemas/user.shema';
 
-export const User = createParamDecorator(
-  (data: unknown, ctx: ExecutionContext) => {
+export const GetUser = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext): User => {
     const request = ctx.switchToHttp().getRequest();
-    return {
-      name: 'Son Tran',
-      age: 23,
-    };
+    return request.user;
   },
 );

@@ -23,6 +23,11 @@ export class User {
 
   @Prop()
   salt: string;
+
+  @Prop({
+    default: false,
+  })
+  isVerified: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
