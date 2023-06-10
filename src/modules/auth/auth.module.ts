@@ -15,14 +15,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: (configService) => {
+      useFactory: async (config: ConfigService) => {
         return {
-          secret: configService.get('JWT_SECRET'),
+          secret: config.get('JWT_SECRET'),
           signOptions: {
             expiresIn: EXPIRES_IN,
           },
         };
       },
+      inject: [ConfigService],
     }),
     UsersModule,
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),

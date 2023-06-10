@@ -8,6 +8,10 @@
   ],
   "routes": [
     {
+      "src": "templates/(.*)",
+      "dest": "templates/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "src/main.ts",
       "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"]

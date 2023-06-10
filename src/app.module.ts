@@ -36,7 +36,7 @@ import * as Joi from 'joi';
           from: `"No Reply" <${config.get('MAIL_FROM')}>`,
         },
         template: {
-          dir: join(__dirname, 'src/templates/emails'),
+          dir: join(__dirname, 'templates/emails'),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,
