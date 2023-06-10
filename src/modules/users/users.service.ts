@@ -56,8 +56,17 @@ export class UsersService {
     return this.userModel.find().select(['-password', '-salt']).exec();
   }
 
-  async findOne(id: string): Promise<UserDocument> {
+  async findOneById(id: string): Promise<UserDocument> {
     return this.userModel.findById(id).select(['-password', '-salt']).exec();
+  }
+
+  async findOneByEmail(email: string): Promise<UserDocument> {
+    return this.userModel
+      .findOne({
+        email: email,
+      })
+      .select(['-password', '-salt'])
+      .exec();
   }
 
   async confirmVerified(id: string) {

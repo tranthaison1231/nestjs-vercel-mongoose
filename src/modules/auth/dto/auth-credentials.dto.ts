@@ -7,11 +7,21 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class SignInDto {
+export class ForgotPasswordDto {
   @ApiProperty()
   @IsEmail()
   email: string;
+}
 
+export class ResetPasswordDto {
+  @ApiProperty()
+  @MinLength(8)
+  @MaxLength(20)
+  @IsStrongPassword()
+  newPassword: string;
+}
+
+export class SignInDto extends ForgotPasswordDto {
   @ApiProperty()
   @MinLength(8)
   @MaxLength(20)

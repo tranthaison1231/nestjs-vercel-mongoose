@@ -13,7 +13,12 @@ import { JwtAuthGuard } from 'src/shared/guards/jwt.guard';
 import { GetUser } from '../../shared/decorators/user.decorator';
 import { UserDocument } from '../users/schemas/user.shema';
 import { AuthService } from './auth.service';
-import { SignInDto, SignUpDto } from './dto/auth-credentials.dto';
+import {
+  ForgotPasswordDto,
+  ResetPasswordDto,
+  SignInDto,
+  SignUpDto,
+} from './dto/auth-credentials.dto';
 
 @ApiTags('Authentication')
 @Controller()
@@ -28,6 +33,22 @@ export class AuthController {
   @Post('/sign-in')
   async signIn(@Body(ValidationPipe) signInDto: SignInDto) {
     return this.authService.signIn(signInDto);
+  }
+
+  @Post('/forgot-password')
+  async forgotPassword(
+    @Body(ValidationPipe) forgotPasswordDto: ForgotPasswordDto,
+  ) {
+    return this.authService.forgotPassword(forgotPasswordDto);
+  }
+
+  @Post('/reset-password')
+  @UseGuards(JwtAuthGuard)
+  async resetPassword(
+    @GetUser() user: UserDocument,
+    @Body(ValidationPipe) { newPassword }: ResetPasswordDto,
+  ) {
+    return this.authService.resetPassword(user, newPassword);
   }
 
   @Put('/verified')
