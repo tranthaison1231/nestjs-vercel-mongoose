@@ -18,7 +18,7 @@ import {
 } from './dto/auth-credentials.dto';
 import { TokenPayloadDto } from './dto/token-payload.dto';
 import * as bcrypt from 'bcrypt';
-import { hashPassword } from 'src/shared/utils/password';
+import { hashPassword } from '../../shared/utils/password';
 @Injectable()
 export class AuthService {
   constructor(

@@ -6,7 +6,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/shared/guards/jwt.guard';
+import { JwtAuthGuard } from '../../shared/guards/jwt.guard';
 import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
 import { UsersService } from './users.service';
 
