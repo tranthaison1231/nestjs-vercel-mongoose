@@ -2,8 +2,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { MongoExceptionFilter } from './shared/filters/mongo-exception.filter';
-import validationOptions from './shared/utils/validationOptions';
+import { MongoExceptionFilter } from '@/shared/filters/mongo-exception.filter';
+import validationOptions from '@/shared/utils/validationOptions';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
