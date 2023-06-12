@@ -8,11 +8,7 @@ import validationOptions from '@/shared/utils/validationOptions';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
-  app.enableCors({
-    origin: '*',
-    methods: 'GET, PUT, POST, DELETE',
-    allowedHeaders: 'Content-Type, Authorization',
-  });
+  app.enableCors();
   app.useGlobalPipes(new ValidationPipe(validationOptions));
   app.useGlobalFilters(new MongoExceptionFilter());
 
