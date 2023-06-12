@@ -1,19 +1,8 @@
 {
-  "version": 2,
   "functions": {
-    "build/main.js": {
+    "api/index.js": {
       "runtime": "@vercel/node@2.7.0"
     }
   },
-  "routes": [
-    {
-      "src": "templates/(.*)",
-      "dest": "templates/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"]
-    }
-  ]
+  "rewrites": [{ "source": "/api/(.*)", "destination": "/api" }]
 }
