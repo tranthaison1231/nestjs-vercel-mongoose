@@ -1,1 +1,1 @@
-export { default } from '../dist/main.js';
+export { default } from '../public/main.js';
