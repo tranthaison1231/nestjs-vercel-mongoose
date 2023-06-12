@@ -6,10 +6,10 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
-import { comparePassword, hashPassword } from '../../shared/utils/password';
-import { SignInDto, SignUpDto } from '../auth/dto/auth-credentials.dto';
+import { comparePassword, hashPassword } from '@/shared/utils/password';
+import { SignInDto, SignUpDto } from '@/modules/auth/dto/auth-credentials.dto';
 import { User, UserDocument } from './schemas/user.shema';
-import { ERROR_CODE } from '../../shared/constants /error-code';
+import { ERROR_CODE } from '@/shared/constants /error-code';
 
 @Injectable()
 export class UsersService {

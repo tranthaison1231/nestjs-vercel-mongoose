@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { EXPIRES_IN } from '../../shared/constants /config';
+import { EXPIRES_IN } from '@/shared/constants /config';
 import { User, UserDocument } from '../users/schemas/user.shema';
 import { UsersService } from '../users/users.service';
 import { CreateToken } from './auth.interface';
@@ -18,7 +18,7 @@ import {
 } from './dto/auth-credentials.dto';
 import { TokenPayloadDto } from './dto/token-payload.dto';
 import * as bcrypt from 'bcrypt';
-import { hashPassword } from '../../shared/utils/password';
+import { hashPassword } from '@/shared/utils/password';
 @Injectable()
 export class AuthService {
   constructor(

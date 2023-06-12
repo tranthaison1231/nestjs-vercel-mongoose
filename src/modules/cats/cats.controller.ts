@@ -17,9 +17,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../shared/guards/jwt.guard';
-import { LoggingInterceptor } from '../../shared/interceptors/logging.interceptor';
-import { IDValidator } from '../../shared/validators.ts/id.validator';
+import { JwtAuthGuard } from '@/shared/guards/jwt.guard';
+import { LoggingInterceptor } from '@/shared/interceptors/logging.interceptor';
+import { IDValidator } from '@/shared/validators.ts/id.validator';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { GetCatsFilterDto } from './dto/get-cats-filter.dto';

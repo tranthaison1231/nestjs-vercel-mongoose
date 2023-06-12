@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './schemas/cat.schema';
 import { GetCatsFilterDto } from './dto/get-cats-filter.dto';
-import { IDValidator } from '../../shared/validators.ts/id.validator';
+import { IDValidator } from '@/shared/validators.ts/id.validator';
 
 @Injectable()
 export class CatsService {

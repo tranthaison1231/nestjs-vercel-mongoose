@@ -9,9 +9,9 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../shared/guards/jwt.guard';
-import { GetUser } from '../../shared/decorators/user.decorator';
-import { UserDocument } from '../users/schemas/user.shema';
+import { JwtAuthGuard } from '@/shared/guards/jwt.guard';
+import { GetUser } from '@/shared/decorators/user.decorator';
+import { UserDocument } from '@/modules/users/schemas/user.shema';
 import { AuthService } from './auth.service';
 import {
   ForgotPasswordDto,
