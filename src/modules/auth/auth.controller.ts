@@ -57,6 +57,12 @@ export class AuthController {
     return this.authService.verify(user);
   }
 
+  @Get('/profile')
+  @UseGuards(JwtAuthGuard)
+  async profile(@GetUser() user: UserDocument) {
+    return user;
+  }
+
   @Get('/confirm-verified')
   async confirmVerified(@Query() { token }: { token: string }) {
     return this.authService.confirmVerified(token);
