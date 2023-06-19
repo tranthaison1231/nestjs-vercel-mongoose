@@ -40,7 +40,7 @@ export class AuthService {
       template: './forgot-password',
       context: {
         name: user.name,
-        link: `${this.configService.get('WEB_URL')}/confirm-verified?token=${
+        link: `${this.configService.get('WEB_URL')}/reset-password?token=${
           token.accessToken
         }`,
       },
