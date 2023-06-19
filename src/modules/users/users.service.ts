@@ -60,6 +60,11 @@ export class UsersService {
     return this.userModel.findById(id).select(['-password', '-salt']).exec();
   }
 
+  async compareWithCurrentPassword(password, mail): Promise<boolean> {
+    const user = await this.userModel.findOne({ email: mail }).exec();
+    return comparePassword(password, user.password);
+  }
+
   async findOneByEmail(email: string): Promise<UserDocument> {
     return this.userModel
       .findOne({

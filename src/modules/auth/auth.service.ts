@@ -1,3 +1,5 @@
+import { EXPIRES_IN } from '@/shared/constants /config';
+import { hashPassword } from '@/shared/utils/password';
 import { MailerService } from '@nest-modules/mailer';
 import {
   ConflictException,
@@ -7,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { EXPIRES_IN } from '@/shared/constants /config';
+import * as bcrypt from 'bcrypt';
 import { User, UserDocument } from '../users/schemas/user.shema';
 import { UsersService } from '../users/users.service';
 import { CreateToken } from './auth.interface';
@@ -18,8 +20,6 @@ import {
   SignUpDto,
 } from './dto/auth-credentials.dto';
 import { TokenPayloadDto } from './dto/token-payload.dto';
-import * as bcrypt from 'bcrypt';
-import { comparePassword, hashPassword } from '@/shared/utils/password';
 @Injectable()
 export class AuthService {
   constructor(
@@ -52,8 +52,10 @@ export class AuthService {
     user: UserDocument,
     { password, newPassword }: ChangePasswordDto,
   ) {
-    const userDoc = await this.getUser(String(user._id));
-    const isPasswordValid = await comparePassword(password, userDoc.password);
+    const isPasswordValid = await this.usersService.compareWithCurrentPassword(
+      password,
+      user.email,
+    );
     if (!isPasswordValid) {
       throw new UnauthorizedException('Current password is not correct!');
     }
@@ -98,7 +100,7 @@ export class AuthService {
     return user;
   }
 
-  async getUser(userId: string): Promise<User> {
+  async validateUser(userId: string): Promise<User> {
     return this.usersService.findOneById(userId);
   }
 
