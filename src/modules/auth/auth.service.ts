@@ -12,13 +12,14 @@ import { User, UserDocument } from '../users/schemas/user.shema';
 import { UsersService } from '../users/users.service';
 import { CreateToken } from './auth.interface';
 import {
+  ChangePasswordDto,
   ForgotPasswordDto,
   SignInDto,
   SignUpDto,
 } from './dto/auth-credentials.dto';
 import { TokenPayloadDto } from './dto/token-payload.dto';
 import * as bcrypt from 'bcrypt';
-import { hashPassword } from '@/shared/utils/password';
+import { comparePassword, hashPassword } from '@/shared/utils/password';
 @Injectable()
 export class AuthService {
   constructor(
@@ -45,6 +46,17 @@ export class AuthService {
         }`,
       },
     });
+  }
+
+  async changePassword(
+    user: UserDocument,
+    { password, newPassword }: ChangePasswordDto,
+  ) {
+    const isPasswordValid = await comparePassword(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Current password is not correct!');
+    }
+    return this.resetPassword(user, newPassword);
   }
 
   async resetPassword(user: UserDocument, newPassword: string): Promise<User> {

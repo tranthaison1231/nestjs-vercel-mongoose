@@ -21,6 +21,20 @@ export class ResetPasswordDto {
   newPassword: string;
 }
 
+export class ChangePasswordDto {
+  @ApiProperty()
+  @MinLength(8)
+  @MaxLength(20)
+  @IsStrongPassword()
+  password: string;
+
+  @ApiProperty()
+  @MinLength(8)
+  @MaxLength(20)
+  @IsStrongPassword()
+  newPassword: string;
+}
+
 export class SignInDto extends ForgotPasswordDto {
   @ApiProperty()
   @MinLength(8)

@@ -14,6 +14,7 @@ import { GetUser } from '@/shared/decorators/user.decorator';
 import { UserDocument } from '@/modules/users/schemas/user.shema';
 import { AuthService } from './auth.service';
 import {
+  ChangePasswordDto,
   ForgotPasswordDto,
   ResetPasswordDto,
   SignInDto,
@@ -49,6 +50,15 @@ export class AuthController {
     @Body(ValidationPipe) { newPassword }: ResetPasswordDto,
   ) {
     return this.authService.resetPassword(user, newPassword);
+  }
+
+  @Post('/change-password')
+  @UseGuards(JwtAuthGuard)
+  async changePassword(
+    @GetUser() user: UserDocument,
+    @Body(ValidationPipe) changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.authService.changePassword(user, changePasswordDto);
   }
 
   @Put('/verified')
