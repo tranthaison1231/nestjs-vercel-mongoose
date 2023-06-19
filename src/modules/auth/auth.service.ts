@@ -52,7 +52,8 @@ export class AuthService {
     user: UserDocument,
     { password, newPassword }: ChangePasswordDto,
   ) {
-    const isPasswordValid = await comparePassword(password, user.password);
+    const userDoc = await this.getUser(String(user._id));
+    const isPasswordValid = await comparePassword(password, userDoc.password);
     if (!isPasswordValid) {
       throw new UnauthorizedException('Current password is not correct!');
     }
@@ -97,7 +98,7 @@ export class AuthService {
     return user;
   }
 
-  async validateUser(userId: string): Promise<User> {
+  async getUser(userId: string): Promise<User> {
     return this.usersService.findOneById(userId);
   }
 

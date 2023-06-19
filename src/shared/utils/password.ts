@@ -13,15 +13,3 @@ export const comparePassword = async (
 ): Promise<boolean> => {
   return bcrypt.compare(password, hash);
 };
-
-// user
-// Nghia
-// Salt: 1234
-// Password: 1234
-// HashedPasword: tqyqy12461624
-
-// user
-// Son
-// Salt: 1234
-// Password: 1234
-// HashedPasword: tqyqy12461624
