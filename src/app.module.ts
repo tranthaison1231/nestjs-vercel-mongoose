@@ -7,6 +7,7 @@ import { join } from 'path';
 import { AuthModule } from './modules/auth/auth.module';
 import { CatsModule } from './modules/cats/cats.module';
 import { UsersModule } from './modules/users/users.module';
+import { BullModule } from '@nestjs/bull';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -26,6 +27,16 @@ import { UsersModule } from './modules/users/users.module';
         uri: configService.get<string>('DATABASE_URI'),
         dbName: configService.get<string>('DATABASE_NAME'),
         useUnifiedTopology: true,
+      }),
+      inject: [ConfigService],
+    }),
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        redis: {
+          host: configService.get<string>('REDIS_HOST'),
+          port: configService.get<number>('REDIS_PORT'),
+        },
       }),
       inject: [ConfigService],
     }),

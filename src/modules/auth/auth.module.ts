@@ -28,16 +28,6 @@ import { MailConsumer } from '../mail/mail.consumer';
       },
       inject: [ConfigService],
     }),
-    BullModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        redis: {
-          host: configService.get<string>('REDIS_HOST'),
-          port: configService.get<number>('REDIS_PORT'),
-        },
-      }),
-      inject: [ConfigService],
-    }),
     BullModule.registerQueue({
       name: MAIL_QUEUE,
     }),

@@ -41,7 +41,7 @@ export class MailConsumer {
     );
   }
 
-  @Process(MAIL_QUEUE)
+  @Process('sendMailForgotPassword')
   async sendMailForgotPassword(job: Job<{ user: UserDocument; link: string }>) {
     try {
       const { user, link } = job.data;
