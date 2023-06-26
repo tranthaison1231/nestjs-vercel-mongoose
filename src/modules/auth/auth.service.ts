@@ -20,6 +20,10 @@ import {
   SignUpDto,
 } from './dto/auth-credentials.dto';
 import { TokenPayloadDto } from './dto/token-payload.dto';
+import { MAIL_QUEUE } from '@/shared/constants /jobs';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -27,6 +31,8 @@ export class AuthService {
     private usersService: UsersService,
     private readonly configService: ConfigService,
     private mailerService: MailerService,
+    @InjectQueue(MAIL_QUEUE)
+    private readonly mailQueue: Queue,
   ) {}
 
   async forgotPassword({ email }: ForgotPasswordDto) {
@@ -35,17 +41,14 @@ export class AuthService {
       throw new NotFoundException('Email is not exists!');
     }
     const token = await this.createToken({ userId: String(user._id) });
-    return this.mailerService.sendMail({
-      to: user.email,
-      subject: 'Reset your password',
-      template: './forgot-password',
-      context: {
-        name: user.name,
-        link: `${this.configService.get('WEB_URL')}/reset-password?token=${
-          token.accessToken
-        }`,
-      },
+    console.log('token', token);
+    this.mailQueue.add({
+      user: user,
+      link: `${this.configService.get('WEB_URL')}/reset-password?token=${
+        token.accessToken
+      }`,
     });
+    return true;
   }
 
   async changePassword(

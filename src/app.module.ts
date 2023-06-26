@@ -1,13 +1,12 @@
+import { HandlebarsAdapter, MailerModule } from '@nest-modules/mailer';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import * as Joi from 'joi';
+import { join } from 'path';
+import { AuthModule } from './modules/auth/auth.module';
 import { CatsModule } from './modules/cats/cats.module';
 import { UsersModule } from './modules/users/users.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { HandlebarsAdapter, MailerModule } from '@nest-modules/mailer';
-import { join } from 'path';
-import * as Joi from 'joi';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -17,6 +16,8 @@ import * as Joi from 'joi';
         MAIL_TRANSPORT: Joi.string().required(),
         MAIL_FROM: Joi.string().required(),
         WEB_URL: Joi.string().required(),
+        REDIS_HOST: Joi.string().required(),
+        REDIS_PORT: Joi.number().required(),
       }),
     }),
     MongooseModule.forRootAsync({
