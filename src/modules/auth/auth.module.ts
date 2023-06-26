@@ -12,6 +12,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BullModule } from '@nestjs/bull';
 import { MAIL_QUEUE } from '@/shared/constants /jobs';
 import { MailConsumer } from '../mail/mail.consumer';
+import { S3ManagerService } from '../s3-manager/s3-manager.service';
 
 @Module({
   imports: [
@@ -35,6 +36,12 @@ import { MailConsumer } from '../mail/mail.consumer';
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, ConfigService, MailConsumer],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    ConfigService,
+    MailConsumer,
+    S3ManagerService,
+  ],
 })
 export class AuthModule {}

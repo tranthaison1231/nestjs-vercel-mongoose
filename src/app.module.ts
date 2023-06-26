@@ -8,6 +8,10 @@ import { AuthModule } from './modules/auth/auth.module';
 import { CatsModule } from './modules/cats/cats.module';
 import { UsersModule } from './modules/users/users.module';
 import { BullModule } from '@nestjs/bull';
+import { AwsSdkModule } from 'nest-aws-sdk';
+import { S3 } from 'aws-sdk';
+import { S3ManagerModule } from './modules/s3-manager/s3-manager.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,6 +23,9 @@ import { BullModule } from '@nestjs/bull';
         WEB_URL: Joi.string().required(),
         REDIS_HOST: Joi.string().required(),
         REDIS_PORT: Joi.number().required(),
+        AWS_ACCESS_KEY_ID: Joi.string().required(),
+        AWS_SECRET_ACCESS_KEY: Joi.string().required(),
+        AWS_REGION: Joi.string().required(),
       }),
     }),
     MongooseModule.forRootAsync({
@@ -29,6 +36,20 @@ import { BullModule } from '@nestjs/bull';
         useUnifiedTopology: true,
       }),
       inject: [ConfigService],
+    }),
+    AwsSdkModule.forRootAsync({
+      defaultServiceOptions: {
+        useFactory: async (configService: ConfigService) => ({
+          credentials: {
+            accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
+            secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
+          },
+          region: configService.get('AWS_REGION'),
+        }),
+        imports: [ConfigModule],
+        inject: [ConfigService],
+      },
+      services: [S3],
     }),
     BullModule.forRootAsync({
       imports: [ConfigModule],
@@ -60,6 +81,7 @@ import { BullModule } from '@nestjs/bull';
     CatsModule,
     UsersModule,
     AuthModule,
+    S3ManagerModule,
   ],
 })
 export class AppModule {}
