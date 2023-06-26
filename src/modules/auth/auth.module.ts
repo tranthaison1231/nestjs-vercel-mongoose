@@ -11,6 +11,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BullModule } from '@nestjs/bull';
 import { MAIL_QUEUE } from '@/shared/constants /jobs';
+import { MailConsumer } from '../mail/mail.consumer';
 
 @Module({
   imports: [
@@ -44,6 +45,6 @@ import { MAIL_QUEUE } from '@/shared/constants /jobs';
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, ConfigService],
+  providers: [AuthService, JwtStrategy, ConfigService, MailConsumer],
 })
 export class AuthModule {}
