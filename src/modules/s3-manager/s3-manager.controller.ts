@@ -22,6 +22,6 @@ export class S3ManagerController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     const uploadedFile = await this.s3ManagerService.uploadFile(file);
-    console.log(uploadedFile);
+    return uploadedFile;
   }
 }

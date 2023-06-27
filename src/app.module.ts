@@ -1,16 +1,16 @@
+import { S3Client } from '@aws-sdk/client-s3';
 import { HandlebarsAdapter, MailerModule } from '@nest-modules/mailer';
+import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AwsSdkModule } from 'aws-sdk-v3-nest';
 import * as Joi from 'joi';
 import { join } from 'path';
 import { AuthModule } from './modules/auth/auth.module';
 import { CatsModule } from './modules/cats/cats.module';
-import { UsersModule } from './modules/users/users.module';
-import { BullModule } from '@nestjs/bull';
-import { AwsSdkModule } from 'nest-aws-sdk';
-import { S3 } from 'aws-sdk';
 import { S3ManagerModule } from './modules/s3-manager/s3-manager.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -37,26 +37,29 @@ import { S3ManagerModule } from './modules/s3-manager/s3-manager.module';
       }),
       inject: [ConfigService],
     }),
-    AwsSdkModule.forRootAsync({
-      defaultServiceOptions: {
-        useFactory: async (configService: ConfigService) => ({
+    AwsSdkModule.registerAsync({
+      imports: [ConfigModule],
+      isGlobal: true,
+      clientType: S3Client,
+      useFactory: async (configService: ConfigService) => {
+        return new S3Client({
+          region: configService.get('AWS_REGION'),
           credentials: {
             accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
             secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
           },
-          region: configService.get('AWS_REGION'),
-        }),
-        imports: [ConfigModule],
-        inject: [ConfigService],
+        });
       },
-      services: [S3],
+      inject: [ConfigService],
     }),
     BullModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         redis: {
           host: configService.get<string>('REDIS_HOST'),
-          port: configService.get<number>('REDIS_PORT'),
+          port: +configService.get<number>('REDIS_PORT'),
+          maxRetriesPerRequest: 3,
+          password: configService.get<string>('REDIS_PASSWORD'),
         },
       }),
       inject: [ConfigService],

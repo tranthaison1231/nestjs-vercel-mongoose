@@ -41,24 +41,13 @@ export class AuthService {
       throw new NotFoundException('Email is not exists!');
     }
     const token = await this.createToken({ userId: String(user._id) });
-    // this.mailQueue.add('sendMailForgotPassword', {
-    //   user: user,
-    //   link: `${this.configService.get('WEB_URL')}/reset-password?token=${
-    //     token.accessToken
-    //   }`,
-    // });
-    // return true;
-    return this.mailerService.sendMail({
-      to: user.email,
-      subject: 'Reset your password',
-      template: './forgot-password',
-      context: {
-        name: user.name,
-        link: `${this.configService.get('WEB_URL')}/reset-password?token=${
-          token.accessToken
-        }`,
-      },
+    this.mailQueue.add('sendMailForgotPassword', {
+      user: user,
+      link: `${this.configService.get('WEB_URL')}/reset-password?token=${
+        token.accessToken
+      }`,
     });
+    return true;
   }
 
   async changePassword(
