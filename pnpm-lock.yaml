@@ -33,8 +33,8 @@ dependencies:
     specifier: ^10.0.3
     version: 10.0.3(@nestjs/common@10.0.3)(@nestjs/core@10.0.3)
   '@nestjs/swagger':
-    specifier: ^7.0.7
-    version: 7.0.7(@nestjs/common@10.0.3)(@nestjs/core@10.0.3)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)
+    specifier: ^7.0.10
+    version: 7.0.10(@nestjs/common@10.0.3)(@nestjs/core@10.0.3)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)
   '@ssut/nestjs-sqs':
     specifier: ^2.0.1
     version: 2.0.1(@aws-sdk/client-sqs@3.359.0)(@nestjs/common@10.0.3)(@nestjs/core@10.0.3)
@@ -2501,8 +2501,8 @@ packages:
       - chokidar
     dev: true
 
-  /@nestjs/swagger@7.0.7(@nestjs/common@10.0.3)(@nestjs/core@10.0.3)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13):
-    resolution: {integrity: sha512-qOtWFnXOnzBCOMU0pamDU/5eAq6SpZ6KHKxZsBh2IlGARQftpOEyoFzKgW28aQc8wUTwhQwsmA/D4AakkEWaKg==}
+  /@nestjs/swagger@7.0.10(@nestjs/common@10.0.3)(@nestjs/core@10.0.3)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13):
+    resolution: {integrity: sha512-3tA3c6ZrrQ/DucIef8Sg1rnYDviWv7acs7Zj0m4DfNJsVSTxcJ9u47a0AK7saGlDlCqXMbS0DcG9jOKTNdfKfg==}
     peerDependencies:
       '@fastify/static': ^6.0.0
       '@nestjs/common': ^9.0.0 || ^10.0.0
