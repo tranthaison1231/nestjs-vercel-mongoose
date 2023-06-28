@@ -1,6 +1,10 @@
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { InjectAws } from 'aws-sdk-v3-nest';
 
 @Injectable()
@@ -20,5 +24,19 @@ export class S3ManagerService {
       }),
     );
     return uploadResult;
+  }
+
+  async getFile(key: string, bucket: string) {
+    try {
+      const response = await this.s3.send(
+        new GetObjectCommand({ Key: key, Bucket: bucket }),
+      );
+      const str = await response.Body.transformToString();
+
+      return str;
+    } catch (error) {
+      console.error('Error getting file with S3: ', error);
+      throw new Error(error);
+    }
   }
 }

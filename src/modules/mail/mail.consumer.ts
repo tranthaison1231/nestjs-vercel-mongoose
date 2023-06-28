@@ -10,6 +10,7 @@ import { Job } from 'bull';
 import { MAIL_QUEUE } from '@/shared/constants /jobs';
 import { MailerService } from '@nest-modules/mailer';
 import { UserDocument } from '../users/schemas/user.shema';
+import template from 'lodash.template';
 
 @Processor(MAIL_QUEUE)
 export class MailConsumer {
@@ -42,17 +43,18 @@ export class MailConsumer {
   }
 
   @Process('sendMailForgotPassword')
-  async sendMailForgotPassword(job: Job<{ user: UserDocument; link: string }>) {
+  async sendMailForgotPassword(
+    job: Job<{ user: UserDocument; link: string; emailTemplate: string }>,
+  ) {
     try {
-      const { user, link } = job.data;
+      const { user, link, emailTemplate } = job.data;
       const result = await this.mailService.sendMail({
         to: user.email,
         subject: 'Reset your password',
-        template: './forgot-password',
-        context: {
+        html: template(emailTemplate)({
+          link,
           name: user.name,
-          link: link,
-        },
+        }),
       });
       return result;
     } catch (error) {

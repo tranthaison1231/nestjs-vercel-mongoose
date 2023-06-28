@@ -1,3 +1,4 @@
+import { S3ManagerService } from './../s3-manager/s3-manager.service';
 import { EXPIRES_IN } from '@/shared/constants /config';
 import { hashPassword } from '@/shared/utils/password';
 import { MailerService } from '@nest-modules/mailer';
@@ -30,6 +31,7 @@ export class AuthService {
     private jwtService: JwtService,
     private usersService: UsersService,
     private readonly configService: ConfigService,
+    private readonly s3ManagerService: S3ManagerService,
     private mailerService: MailerService,
     @InjectQueue(MAIL_QUEUE)
     private readonly mailQueue: Queue,
@@ -41,11 +43,16 @@ export class AuthService {
       throw new NotFoundException('Email is not exists!');
     }
     const token = await this.createToken({ userId: String(user._id) });
-    this.mailQueue.add('sendMailForgotPassword', {
+    const emailTemplate = await this.s3ManagerService.getFile(
+      'emails/forgot-password.html',
+      'nest-basic',
+    );
+    await this.mailQueue.add('sendMailForgotPassword', {
       user: user,
       link: `${this.configService.get('WEB_URL')}/reset-password?token=${
         token.accessToken
       }`,
+      emailTemplate,
     });
     return true;
   }
