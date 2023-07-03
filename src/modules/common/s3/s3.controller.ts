@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
-import { S3ManagerService } from './s3-manager.service';
+import { S3ManagerService } from './s3.service';
 import { Express } from 'express';
 
 @UseGuards(JwtAuthGuard)

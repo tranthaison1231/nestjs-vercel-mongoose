@@ -15,15 +15,23 @@ export class S3ManagerService {
   ) {}
 
   async uploadFile(file: Express.Multer.File) {
-    const uploadResult = await this.s3.send(
+    const key = `${new Date().getTime()}.${file.originalname.split('.').pop()}`;
+
+    await this.s3.send(
       new PutObjectCommand({
         Bucket: this.configService.get('AWS_BUCKET_NAME'),
         ContentType: file.mimetype,
         Body: file.buffer,
-        Key: `${new Date().getTime()}.${file.originalname.split('.').pop()}`,
+        Key: key,
       }),
     );
-    return uploadResult;
+    const url = `https://${this.configService.get(
+      'AWS_BUCKET_NAME',
+    )}.s3.amazonaws.com/${key}`;
+
+    return {
+      url,
+    };
   }
 
   async getFile(key: string, bucket: string) {

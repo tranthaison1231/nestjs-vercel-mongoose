@@ -1,18 +1,16 @@
+import { EXPIRES_IN } from '@/shared/constants /config';
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
-import { EXPIRES_IN } from '@/shared/constants /config';
-import { User, UserSchema } from '../users/schemas/user.shema';
+import { S3ManagerService } from '../common/s3/s3.service';
+import { User, UserSchema } from '../users/schemas/user.schema';
 import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { BullModule } from '@nestjs/bull';
-import { MAIL_QUEUE } from '@/shared/constants /jobs';
-import { MailConsumer } from '../mail/mail.consumer';
-import { S3ManagerService } from '../s3-manager/s3-manager.service';
+import { SQSManagerService } from '../common/sqs/sqs.service';
 
 @Module({
   imports: [
@@ -29,9 +27,6 @@ import { S3ManagerService } from '../s3-manager/s3-manager.service';
       },
       inject: [ConfigService],
     }),
-    BullModule.registerQueue({
-      name: MAIL_QUEUE,
-    }),
     UsersModule,
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
@@ -40,8 +35,8 @@ import { S3ManagerService } from '../s3-manager/s3-manager.service';
     AuthService,
     JwtStrategy,
     ConfigService,
-    MailConsumer,
     S3ManagerService,
+    SQSManagerService,
   ],
 })
 export class AuthModule {}

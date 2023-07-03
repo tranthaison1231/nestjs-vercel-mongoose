@@ -1,4 +1,4 @@
-import { UserDocument } from '@/modules/users/schemas/user.shema';
+import { UserDocument } from '@/modules/users/schemas/user.schema';
 import { GetUser } from '@/shared/decorators/user.decorator';
 import { JwtAuthGuard } from '@/shared/guards/jwt.guard';
 import {

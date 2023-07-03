@@ -1,4 +1,3 @@
-import { S3ManagerService } from './../s3-manager/s3-manager.service';
 import { EXPIRES_IN } from '@/shared/constants /config';
 import { hashPassword } from '@/shared/utils/password';
 import { MailerService } from '@nest-modules/mailer';
@@ -11,7 +10,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { User, UserDocument } from '../users/schemas/user.shema';
+import { SQSManagerService } from '../common/sqs/sqs.service';
+import { User, UserDocument } from '../users/schemas/user.schema';
 import { UsersService } from '../users/users.service';
 import { CreateToken } from './auth.interface';
 import {
@@ -21,9 +21,6 @@ import {
   SignUpDto,
 } from './dto/auth-credentials.dto';
 import { TokenPayloadDto } from './dto/token-payload.dto';
-import { MAIL_QUEUE } from '@/shared/constants /jobs';
-import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
 
 @Injectable()
 export class AuthService {
@@ -31,10 +28,8 @@ export class AuthService {
     private jwtService: JwtService,
     private usersService: UsersService,
     private readonly configService: ConfigService,
-    private readonly s3ManagerService: S3ManagerService,
     private mailerService: MailerService,
-    @InjectQueue(MAIL_QUEUE)
-    private readonly mailQueue: Queue,
+    private readonly sqsManagerService: SQSManagerService,
   ) {}
 
   async forgotPassword({ email }: ForgotPasswordDto) {
@@ -43,16 +38,15 @@ export class AuthService {
       throw new NotFoundException('Email is not exists!');
     }
     const token = await this.createToken({ userId: String(user._id) });
-    const emailTemplate = await this.s3ManagerService.getFile(
-      'emails/forgot-password.html',
-      'nest-basic',
-    );
-    await this.mailQueue.add('sendMailForgotPassword', {
-      user: user,
-      link: `${this.configService.get('WEB_URL')}/reset-password?token=${
-        token.accessToken
-      }`,
-      emailTemplate,
+    await this.sqsManagerService.sendEmailMessage({
+      type: 'forgot-password',
+      data: {
+        name: user.name,
+        link: `${this.configService.get('WEB_URL')}/reset-password?token=${
+          token.accessToken
+        }`,
+        to: user.email,
+      },
     });
     return true;
   }

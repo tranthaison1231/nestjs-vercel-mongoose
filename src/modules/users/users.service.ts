@@ -8,7 +8,7 @@ import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { comparePassword, hashPassword } from '@/shared/utils/password';
 import { SignInDto, SignUpDto } from '@/modules/auth/dto/auth-credentials.dto';
-import { User, UserDocument } from './schemas/user.shema';
+import { User, UserDocument } from './schemas/user.schema';
 import { ERROR_CODE } from '@/shared/constants /error-code';
 
 @Injectable()
