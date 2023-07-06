@@ -11,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { SQSManagerService } from '../common/sqs/sqs.service';
-import { User, UserDocument } from '../users/schemas/user.schema';
+import { User, UserDocument } from '../users/schemas/users.schema';
 import { UsersService } from '../users/users.service';
 import { CreateToken } from './auth.interface';
 import {

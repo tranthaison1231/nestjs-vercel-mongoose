@@ -22,6 +22,9 @@ export class User {
   password: string;
 
   @Prop()
+  avatarURL: string;
+
+  @Prop()
   salt: string;
 
   @Prop({

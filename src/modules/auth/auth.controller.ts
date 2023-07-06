@@ -1,4 +1,4 @@
-import { UserDocument } from '@/modules/users/schemas/user.schema';
+import { UserDocument } from '@/modules/users/schemas/users.schema';
 import { GetUser } from '@/shared/decorators/user.decorator';
 import { JwtAuthGuard } from '@/shared/guards/jwt.guard';
 import {
@@ -20,11 +20,14 @@ import {
   SignInDto,
   SignUpDto,
 } from './dto/auth-credentials.dto';
+import { UpdatedUserDto } from '../users/dto/users-payload.dto';
+import { UsersService } from '../users/users.service';
 
 @ApiTags('Authentication')
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService,
+    private readonly userService: UsersService) {}
 
   @Post('/sign-up')
   async signUp(@Body(ValidationPipe) signUpDto: SignUpDto) {
@@ -69,8 +72,16 @@ export class AuthController {
 
   @Get('/profile')
   @UseGuards(JwtAuthGuard)
-  async profile(@GetUser() user: UserDocument) {
+  async getProfile(@GetUser() user: UserDocument) {
     return user;
+  }
+
+  @Put('/profile')
+  @UseGuards(JwtAuthGuard)
+  async updateProfile(
+    @GetUser() user: UserDocument, 
+    @Body(ValidationPipe) updatedUser: UpdatedUserDto) {
+    return this.userService.update(user.id, updatedUser);
   }
 
   @Get('/confirm-verified')

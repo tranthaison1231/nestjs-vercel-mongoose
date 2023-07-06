@@ -8,8 +8,9 @@ import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { comparePassword, hashPassword } from '@/shared/utils/password';
 import { SignInDto, SignUpDto } from '@/modules/auth/dto/auth-credentials.dto';
-import { User, UserDocument } from './schemas/user.schema';
+import { User, UserDocument } from './schemas/users.schema';
 import { ERROR_CODE } from '@/shared/constants /error-code';
+import { UpdatedUserDto } from './dto/users-payload.dto';
 
 @Injectable()
 export class UsersService {
@@ -80,6 +81,21 @@ export class UsersService {
       throw new ConflictException('User is verified');
     }
     user.isVerified = true;
+    await user.save();
+    return user;
+  }
+
+  async update(id: string, updatedUser: UpdatedUserDto) {
+    const user = await this.userModel.findById(id).exec();
+    if (!user) {
+      throw new ConflictException('User is not exist');
+    }
+    if (updatedUser.name) {
+      user.name = updatedUser.name;
+    }
+    if (updatedUser.avatarURL) {
+      user.avatarURL = updatedUser.avatarURL;
+    }
     await user.save();
     return user;
   }
