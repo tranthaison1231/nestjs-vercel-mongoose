@@ -3,9 +3,12 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectAws } from 'aws-sdk-v3-nest';
+import { PresignedUrlDto } from './dto/s3-payload.dto';
+import { getFileName } from '@/shared/utils/file';
 
 @Injectable()
 export class S3ManagerService {
@@ -15,8 +18,8 @@ export class S3ManagerService {
   ) {}
 
   async uploadFile(file: Express.Multer.File) {
-    const key = `${new Date().getTime()}.${file.originalname.split('.').pop()}`;
-
+    const key = getFileName(file.originalname);
+    console.log(file);
     await this.s3.send(
       new PutObjectCommand({
         Bucket: this.configService.get('AWS_BUCKET_NAME'),
@@ -32,6 +35,30 @@ export class S3ManagerService {
     return {
       url,
     };
+  }
+
+  async presignedUrlS3({ fileName, type, folderPrefix }: PresignedUrlDto) {
+    try {
+      const key = folderPrefix
+        ? `${folderPrefix}/${getFileName(fileName)}`
+        : getFileName(fileName);
+      const command = new PutObjectCommand({
+        Key: key,
+        Bucket: this.configService.get('AWS_BUCKET_NAME'),
+        ContentType: type,
+        ACL: 'public-read',
+      });
+      const uploadUrl = await getSignedUrl(this.s3, command, {
+        expiresIn: 3600,
+      });
+
+      return {
+        uploadUrl,
+      };
+    } catch (error) {
+      console.error('Error getting file with S3: ', error);
+      throw new Error(error);
+    }
   }
 
   async getFile(key: string, bucket: string) {
