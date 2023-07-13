@@ -7,11 +7,11 @@ import { AwsSdkModule } from 'aws-sdk-v3-nest';
 import * as Joi from 'joi';
 import { join } from 'path';
 import { AuthModule } from './modules/auth/auth.module';
-import { CatsModule } from './modules/cats/cats.module';
 import { S3ManagerModule } from './modules/common/s3/s3.module';
 import { SQSManagerModule } from './modules/common/sqs/sqs.module';
 import { UsersModule } from './modules/users/users.module';
 import { SQSClient } from '@aws-sdk/client-sqs';
+import { EventsModule } from './modules/events/events.module';
 
 @Module({
   imports: [
@@ -85,8 +85,8 @@ import { SQSClient } from '@aws-sdk/client-sqs';
       }),
       inject: [ConfigService],
     }),
-    CatsModule,
     UsersModule,
+    EventsModule,
     AuthModule,
     S3ManagerModule,
     SQSManagerModule,

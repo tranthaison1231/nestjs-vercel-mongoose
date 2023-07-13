@@ -54,11 +54,11 @@ export class UsersService {
   }
 
   async findAll(): Promise<UserDocument[]> {
-    return this.userModel.find().select(['-password', '-salt']).exec();
+    return this.userModel.find().exec();
   }
 
   async findOneById(id: string): Promise<UserDocument> {
-    return this.userModel.findById(id).select(['-password', '-salt']).exec();
+    return await this.userModel.findById(id).exec();
   }
 
   async compareWithCurrentPassword(password, mail): Promise<boolean> {
