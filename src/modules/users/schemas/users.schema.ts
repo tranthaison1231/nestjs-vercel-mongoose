@@ -1,7 +1,6 @@
-import { Event } from '@/modules/events/events.schema';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { HydratedDocument, Types } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -32,9 +31,6 @@ export class User {
     default: false,
   })
   isVerified: boolean;
-
-  @Prop({ type: [Types.ObjectId], ref: 'Event' })
-  events: Event[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
