@@ -10,7 +10,7 @@ export class EventsService {
     @InjectModel(Event.name) private readonly eventModel: Model<Event>,
   ) {}
 
-  async findAll(userId: string): Promise<EventDocument[]> {
+  async findBy(userId: string): Promise<EventDocument[]> {
     return this.eventModel
       .find({
         user: userId,
@@ -19,11 +19,15 @@ export class EventsService {
       .exec();
   }
 
+  async findAll(): Promise<EventDocument[]> {
+    return this.eventModel.find().populate('user').exec();
+  }
+
   async findById(eventId): Promise<EventDocument[]> {
     return this.eventModel.findById(eventId).populate('user');
   }
 
-  async create(
+  async createBy(
     userId: string,
     createEventDto: CreateEventDto,
   ): Promise<EventDocument> {
