@@ -2,7 +2,6 @@ import { JwtAuthGuard } from '@/shared/guards/jwt.guard';
 import {
   Body,
   Controller,
-  Get,
   Post,
   Put,
   UploadedFile,
@@ -11,9 +10,8 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
-import { S3ManagerService } from './s3.service';
-import { Express } from 'express';
 import { PresignedUrlDto } from './dto/s3-payload.dto';
+import { S3ManagerService } from './s3.service';
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('S3')

@@ -31,11 +31,14 @@ import { EventsModule } from './modules/events/events.module';
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('DATABASE_URI'),
-        dbName: configService.get<string>('DATABASE_NAME'),
-        useUnifiedTopology: true,
-      }),
+      useFactory: async (configService: ConfigService) => {
+        // const secrets = await fetchSecrets('mongo');
+        return {
+          uri: configService.get<string>('DATABASE_URI'),
+          dbName: configService.get<string>('DATABASE_NAME'),
+          useUnifiedTopology: true,
+        };
+      },
       inject: [ConfigService],
     }),
     AwsSdkModule.registerAsync({
